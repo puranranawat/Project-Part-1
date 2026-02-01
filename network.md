@@ -1,172 +1,111 @@
+# Network Design
+This section gives the detailed network design.
+
+[Assumptions](#assumptions) | [Network Design Diagrams and Justifications](#network-design-diagrams-and-justifications) | [WiFi Design](#wifi-design) | [Address Allocations](#address-allocations) | [Recommended Hardware](#recommended-hardware) | [Plan](./plan.md) | [Cloud Services](./cloud.md) | [Security](./security.md) | [Ethics](./ethics.md) | [Reflection](./reflection.md) | [Return to index](./README.md)
+
+---
+
 ## Assumptions
 
-The project scenario does not specify all technical and operational details required to design a complete and realistic network. The following assumptions have therefore been made to support the proposed network design. These assumptions are reasonable, limited in scope, and directly influence the design decisions presented in this report.
+The project scenario does not provide all technical details required to design a complete and realistic network. The following assumptions have therefore been made. These assumptions are reasonable, limited, and directly influence the proposed network design.
 
 1. **Headquarters location**  
-   The Truelec headquarters is assumed to be located in **Melbourne, Australia**. This assumption aligns with the scenario instruction for students studying at the Melbourne campus and provides a realistic basis for WAN connectivity and cloud region selection.
+   The Truelec headquarters is assumed to be located in **Melbourne, Australia**, in accordance with the scenario instructions. This assumption provides a realistic basis for WAN connectivity, network scale, and infrastructure design.
 
 2. **Branch office locations**  
-   Truelec is assumed to operate branch offices in the following Australian cities:  
-   - **Brisbane**  
-   - **Perth**  
-   - **Adelaide**  
-   - **Hobart**  
-
-   While the organisation has multiple branch offices, the detailed network design is presented for **one representative branch office**, with the same design principles assumed to be applicable to the remaining branches.
+   Truelec is assumed to operate branch offices in **Brisbane, Perth, Adelaide, and Hobart**. The detailed network design is presented for **one representative branch office**, with the same design principles assumed to apply to all other branches.
 
 3. **Number of staff at headquarters**  
-   The headquarters is assumed to employ **65 staff members**, including management, project consultants, marketing personnel, and ICT staff. This number falls within the range specified in the scenario and is used to determine network capacity, WiFi coverage requirements, and equipment selection.
+   The headquarters is assumed to have **65 staff members**, including management, consultants, marketing staff, and ICT personnel. This assumption is used to determine network capacity, WiFi coverage, and equipment sizing.
 
 4. **Number of staff at branch office**  
-   The designed branch office is assumed to have **20 staff members**, including electricians, engineers, site supervisors, and support staff. This assumption reflects a mid-sized branch office and informs the sizing of network infrastructure, WiFi access points, and IP address allocation.
+   The representative branch office is assumed to have **20 staff members**, including electricians, engineers, and support staff. This assumption informs branch network capacity and IP address allocation.
 
-These assumptions are used consistently throughout the network design, including the topology, IP addressing scheme, WiFi configuration, equipment selection, and capacity planning. Any variation in these assumptions would require proportional adjustments to the proposed design rather than a fundamental redesign.
-
-## IP Addressing Plan
-
-A structured IPv4 addressing scheme has been designed to support the headquarters and branch office networks while ensuring clarity, scalability, and ease of management. The addressing plan strictly follows the project requirements by using only `/16` and `/24` subnet masks and by basing the first octet of all IP addresses on the last two digits of the group members’ student IDs.
-
-The addressing scheme separates major network functions into distinct sub-networks to improve manageability, reduce broadcast traffic, and support future growth.
+These assumptions are applied consistently throughout the network topology, IP addressing scheme, WiFi design, and hardware recommendations.
 
 ---
 
-### IP Addressing Design Principles
+## Network Design Diagrams and Justifications
 
-The following principles guided the IP addressing design:
+The proposed network is designed using a **centralised hub-and-spoke topology**, where the headquarters acts as the central hub and branch offices connect via WAN links. This design simplifies management, centralises services, and supports consistent security enforcement across the organisation.
 
-- Only `/16` and `/24` subnet masks are used, as required by the project specification.
-- The first octet of each IP address is derived from the student ID digits **87** and **37**.
-- No private IP address ranges (e.g. 192.168.x.x or 10.x.x.x) are used.
-- Separate address blocks are allocated for different functional areas such as staff, servers, WiFi, and IoT devices.
-- Sufficient spare address space is reserved to accommodate organisational growth.
+To meet the requirement for high availability, the headquarters network includes **redundant WAN connections and edge routers**. Two Internet Service Providers connect to separate HQ edge routers, ensuring continued connectivity in the event of a link or device failure.
 
----
+Logical network segmentation is implemented to separate staff devices, servers, wireless access, and IoT systems. This improves performance, simplifies troubleshooting, and reduces security risks by limiting unnecessary access between different device categories.
 
-### Headquarters IP Address Allocation
+### Logical Network Diagram
 
-The headquarters network uses the **87.0.0.0/16** address block, providing a large and flexible address space suitable for a central office with multiple services and device categories.
+The diagram below shows the complete logical network design for Truelec, including the headquarters and one representative branch office.
 
-| Network Segment | Purpose | Address Range | Subnet Mask | Approx. Capacity | Notes |
-|-----------------|---------|---------------|-------------|------------------|-------|
-| HQ Staff LAN | Wired user devices for management and staff | 87.1.0.0 – 87.1.0.255 | /24 | 254 hosts | Supports current staff and moderate growth |
-| HQ Server Network | Application, database, and internal service servers | 87.2.0.0 – 87.2.0.255 | /24 | 254 hosts | Isolated to improve security and performance |
-| HQ WiFi Network | Wireless access for staff and authorised devices | 87.3.0.0 – 87.3.0.255 | /24 | 254 hosts | Allows for multiple devices per user |
-| HQ IoT and CCTV Network | CCTV cameras, IoT sensors, RFID access systems | 87.4.0.0 – 87.4.0.255 | /24 | 254 hosts | Separated to reduce risk to core systems |
-| Reserved HQ Address Space | Future expansion | 87.5.0.0 – 87.255.255.255 | /16 | Large | Reserved for additional services or growth |
+![Logical Network Diagram](./diagrams/logical-network.png)
+
+The source file for this diagram is available in the repository:  
+- `./diagrams/logical-network.drawio`
 
 ---
 
-### Branch Office IP Address Allocation
+## WiFi Design
 
-The branch office network uses the **37.0.0.0/16** address block. A simpler structure is applied due to the smaller size of branch offices while still maintaining functional separation.
+An enterprise-grade WiFi network is deployed at the headquarters to support a high density of wireless devices while maintaining performance and security.
 
-| Network Segment | Purpose | Address Range | Subnet Mask | Approx. Capacity | Notes |
-|-----------------|---------|---------------|-------------|------------------|-------|
-| Branch Staff LAN | Wired user devices at the branch | 37.1.0.0 – 37.1.0.255 | /24 | 254 hosts | Adequate for a 20-staff branch with growth |
-| Branch WiFi Network | Wireless access for branch staff | 37.2.0.0 – 37.2.0.255 | /24 | 254 hosts | Supports mobile and field devices |
-| Branch IoT and CCTV Network | CCTV and access control devices | 37.3.0.0 – 37.3.0.255 | /24 | 254 hosts | Isolated to improve security |
-| Reserved Branch Address Space | Future expansion | 37.4.0.0 – 37.255.255.255 | /16 | Large | Reserved for additional branches or services |
-
----
-
-### IP Addressing Justification
-
-The use of separate `/24` sub-networks for staff, servers, WiFi, and IoT devices improves logical separation and simplifies network management. This structure reduces unnecessary broadcast traffic and limits the potential impact of security incidents affecting non-critical devices such as IoT sensors or CCTV cameras.
-
-Allocating `/16` address blocks at the site level (headquarters and branches) provides sufficient flexibility to introduce additional sub-networks in the future without requiring a complete redesign of the addressing scheme. The consistent structure across sites also simplifies troubleshooting and administration for the ICT team.
-
-Overall, this IP addressing plan is clear, scalable, compliant with project constraints, and well suited to the operational requirements of Truelec.
-
-## WiFi Network Design
-
-A dedicated enterprise-grade WiFi network is designed for the Truelec headquarters to provide reliable, secure, and high-performance wireless connectivity for staff and authorised devices. The design considers the number of users, device density, coverage requirements, and security needs of a medium-sized corporate office.
-
----
-
-### Access Point Deployment
-
-Based on the assumption of approximately **65 staff members** at the headquarters and the likelihood that each staff member uses multiple wireless devices (e.g. laptop and mobile phone), the WiFi network is designed to support a high client density.
-
-- **Number of access points:** 4
-- **Placement strategy:**  
-  Access points are evenly distributed across the office floor to provide overlapping coverage and minimise dead zones. Placement avoids physical obstructions such as walls and equipment rooms, and ensures coverage in meeting rooms and shared workspaces.
-
-This deployment allows each access point to support approximately 15–20 concurrent devices, providing sufficient capacity and redundancy.
-
----
-
-### Wireless Standards and Frequency Bands
-
-- **WiFi standard:** IEEE 802.11ax (WiFi 6)  
-  This standard is selected due to its improved efficiency, higher throughput, and better performance in environments with many simultaneous users compared to earlier standards.
-
+- **Wireless standard:** IEEE 802.11ax (WiFi 6)  
 - **Frequency bands:**  
-  - **5 GHz band** is used as the primary band to provide higher throughput and reduced interference.  
-  - **2.4 GHz band** is enabled for legacy device compatibility and extended coverage where required.
+  - 5 GHz is used as the primary band to provide higher throughput and reduced interference  
+  - 2.4 GHz is enabled to support legacy devices  
+
+- **Access point deployment:**  
+  Four wireless access points are installed and evenly distributed across the office to ensure full coverage, redundancy, and support for multiple concurrent devices per user.
+
+- **Channel configuration:**  
+  - Non-overlapping channels are used on the 5 GHz band  
+  - Channels 1, 6, and 11 are used on the 2.4 GHz band  
+
+- **Security configuration:**  
+  - WPA3-Enterprise authentication is used for strong encryption and user authentication  
+  - Wireless clients are isolated within a dedicated WiFi subnet to limit exposure to critical systems  
+
+This WiFi design provides reliable coverage, strong security, and scalability to support future growth.
 
 ---
 
-### Channel Configuration
+## Address Allocations
 
-- **5 GHz channels:**  
-  Non-overlapping channels are assigned to adjacent access points to minimise co-channel interference. Automatic channel selection is enabled to allow the system to adapt to environmental changes.
+A structured IPv4 addressing scheme is implemented using only `/24` and `/16` network masks, as required by the project specification. The first octet of each address is derived from the group members’ student IDs, and no private IP ranges are used.
 
-- **2.4 GHz channels:**  
-  Channels **1, 6, and 11** are used to avoid overlap and reduce interference.
+### Headquarters Address Allocation (87.0.0.0/16)
 
-Channel planning ensures stable performance and efficient spectrum utilisation across the office.
+| Network Segment | Purpose | Subnet |
+|----------------|---------|--------|
+| HQ Staff LAN | Wired staff workstations | 87.1.0.0/24 |
+| HQ Server Network | Application and internal servers | 87.2.0.0/24 |
+| HQ WiFi Network | Wireless staff access | 87.3.0.0/24 |
+| HQ IoT & CCTV Network | CCTV, IoT sensors, RFID systems | 87.4.0.0/24 |
 
----
+### Branch Office Address Allocation (37.0.0.0/16)
 
-### WiFi Security Configuration
+| Network Segment | Purpose | Subnet |
+|----------------|---------|--------|
+| Branch Staff LAN | Wired staff devices | 37.1.0.0/24 |
+| Branch WiFi Network | Wireless access | 37.2.0.0/24 |
+| Branch IoT & CCTV Network | Security and IoT devices | 37.3.0.0/24 |
 
-To protect organisational data and prevent unauthorised access, the following security measures are implemented:
-
-- **Authentication and encryption:**  
-  - **WPA3-Enterprise** is used for the primary staff WiFi network, providing strong encryption and centralised authentication.
-  - Authentication is integrated with the organisation’s directory service to ensure only authorised users can connect.
-
-- **Network segregation:**  
-  Wireless clients are assigned to the dedicated HQ WiFi IP subnet, keeping wireless traffic logically separated from critical server and IoT networks.
-
-- **Access control:**  
-  Role-based access policies are applied to restrict access to sensitive internal resources when connected via WiFi.
+This addressing scheme is clear, scalable, and consistent across all sites.
 
 ---
 
-### WiFi Design Justification
+## Recommended Hardware
 
-The proposed WiFi design provides a balance between performance, coverage, and security. The use of multiple access points ensures consistent coverage and supports high device density, while the selection of WiFi 6 improves efficiency in a busy office environment.
+The following enterprise-grade network equipment is recommended to support the proposed design. The equipment is selected based on reliability, performance, scalability, and suitability for a multi-site organisation.
 
-Separating the WiFi network from other network segments reduces the impact of potential security incidents and simplifies management. Overall, the design meets the operational requirements of the headquarters and aligns with industry best practices for enterprise wireless networks.
+| Device Type | Manufacturer | Model | Key Specifications | Quantity | Approx. Cost (AUD) |
+|------------|--------------|-------|--------------------|----------|--------------------|
+| Edge Router | Cisco | ISR 4331 | Gigabit WAN, enterprise security features | 2 | $3,200 each |
+| Core Switch | Cisco | Catalyst 2960-X | 48× Gigabit ports, managed switching | 1 | $4,000 |
+| Access Switch | Cisco | Catalyst 2960-L | 24× Gigabit ports | 2 | $2,200 each |
+| Wireless Access Point | Cisco | Aironet 1832i | 802.11ax, dual-band, PoE | 4 | $1,200 each |
+| Application Server | Dell | PowerEdge T350 | Xeon CPU, 32 GB RAM, RAID storage | 3 | $3,500 each |
+| Branch Router | Cisco | ISR 4321 | Gigabit WAN, VPN support | 1 | $2,500 |
 
-## Recommended Network Equipment
-
-The following network equipment is recommended to support the proposed network design for the Truelec headquarters and branch office. The equipment has been selected based on performance, scalability, reliability, and suitability for a medium-sized enterprise environment. All specifications and prices are indicative and sourced from vendor or authorised reseller websites in Australian dollars (AUD).
-
----
-
-### Network Equipment List
-
-| Device Type | Manufacturer | Model | Key Specifications | Quantity | Approx. Cost (AUD) | Reference Link |
-|------------|--------------|-------|--------------------|----------|--------------------|----------------|
-| Edge Router | Cisco | ISR 4331 | 3× Gigabit Ethernet, WAN support, enterprise security features | 2 | $3,200 each | https://www.cisco.com |
-| Core Switch | Cisco | Catalyst 2960-X | 48× Gigabit Ethernet ports, Layer 2 switching, PoE support | 1 | $4,000 | https://www.cisco.com |
-| Access Switch | Cisco | Catalyst 2960-L | 24× Gigabit Ethernet ports, VLAN support, energy efficient | 2 | $2,200 each | https://www.cisco.com |
-| Wireless Access Point | Cisco | Aironet 1832i | 802.11ax, dual-band (2.4/5 GHz), PoE powered | 4 | $1,200 each | https://www.cisco.com |
-| Application Server | Dell | PowerEdge T350 | Intel Xeon CPU, 32 GB RAM, RAID storage, dual NICs | 3 | $3,500 each | https://www.dell.com |
-| Branch Router | Cisco | ISR 4321 | 2× Gigabit Ethernet, WAN connectivity, VPN support | 1 | $2,500 | https://www.cisco.com |
+Enterprise-grade routers and switches ensure reliability and support WAN redundancy. Managed switches enable clear traffic separation, while modern wireless access points support high device density. Dedicated servers provide reliable hosting for internal systems.
 
 ---
-
-### Equipment Selection Justification
-
-Enterprise-grade Cisco routers and switches are selected to provide reliable WAN connectivity, robust performance, and advanced security features suitable for a multi-branch organisation. The use of dual edge routers at the headquarters improves availability by allowing continued operation in the event of a device failure.
-
-The Cisco Catalyst switch series is chosen due to its proven reliability, support for high-speed Ethernet, and scalability. Separating core and access switching roles simplifies network management and allows the infrastructure to grow as additional users or services are introduced.
-
-Cisco Aironet wireless access points supporting the IEEE 802.11ax standard are deployed to deliver high-performance WiFi connectivity in a high-density office environment. Power over Ethernet (PoE) support simplifies installation and reduces cabling complexity.
-
-Dell PowerEdge servers are recommended for on-premise application hosting due to their enterprise reliability, hardware redundancy options, and suitability for continuous operation. Multiple servers are used to support the organisation’s internal systems and to improve service availability.
-
-Overall, the selected equipment provides a balanced solution that meets current operational requirements while allowing future expansion, consistent with industry best practices for enterprise network design.
