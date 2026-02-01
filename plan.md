@@ -33,40 +33,18 @@ This structured communication plan ensures regular interaction, early identifica
 ## Schedule
 The plan of tasks for each group member for the remainder of the project is:
 
-- **Week 5:**  
-  - Finalise group formation and GitHub repository setup  
-  - Complete and commit the project plan (`plan.md`)  
-  - Confirm project assumptions, including headquarters location, branch locations, and staff numbers  
+## Schedule
+The plan of tasks for each group member for the remainder of the project is shown in the table below:
 
-- **Week 6:**  
-  - Design the logical network architecture for the headquarters and one branch office  
-  - Decide and document the IP addressing scheme based on student IDs  
-  - Begin creating network diagrams using diagrams.net  
+| Week | Planned Activities |
+|-------|--------------------|
+| **Week 5** | Finalise group formation and GitHub repository setup; complete and commit the project plan (`plan.md`); confirm project assumptions including headquarters location, branch locations, and staff numbers. |
+| **Week 6** | Design the logical network architecture for the headquarters and one branch office; decide and document the IP addressing scheme based on student IDs; begin creating network diagrams using diagrams.net. |
+| **Week 7** | Finalise network diagrams and export both source (`.drawio`) and image files; complete the network design explanation including justification of sub-networks and devices; finalise WiFi design and equipment selection; submit **Project Part 1 (Network Design)**. |
+| **Week 8** | Select appropriate cloud service providers for comparison; use official cloud calculators to estimate virtual machine costs; export and store cloud pricing evidence in the GitHub repository. |
+| **Week 9** | Complete cloud cost comparison and recommend a cloud provider; conduct the cyber security risk assessment using the provided template; complete the TVAMatrix and capture required screenshots. |
+| **Week 10** | Select and justify appropriate security controls for the highest-risk data asset; analyse ethical and social issues related to data privacy and security; begin drafting the project reflection section. |
+| **Week 11** | Finalise the project reflection including GitHub contribution analysis; record the group presentation video; generate required PDF files and submit **Project Part 2**. |
 
-- **Week 7:**  
-  - Finalise network diagrams and export source (`.drawio`) and image files  
-  - Complete the network design explanation, including justification of sub-networks and devices  
-  - Finalise WiFi design and equipment selection  
-  - Submit **Project Part 1 (Network Design)**  
-
-- **Week 8:**  
-  - Select cloud service providers for comparison  
-  - Use official cloud calculators to estimate virtual machine costs  
-  - Export and store cloud pricing evidence in the GitHub repository  
-
-- **Week 9:**  
-  - Complete cloud cost comparison and provider recommendation  
-  - Conduct the cyber security risk assessment using the provided template  
-  - Complete the TVAMatrix and capture required screenshots  
-
-- **Week 10:**  
-  - Select and justify appropriate security controls for the highest-risk data asset  
-  - Analyse ethical and social issues related to data privacy, security, and compliance  
-  - Begin drafting the project reflection section  
-
-- **Week 11:**  
-  - Finalise project reflection, including GitHub contribution analysis  
-  - Record the group presentation video  
-  - Generate required PDF files and submit **Project Part 2**
 
 This schedule is designed to ensure steady progress across the term, frequent and distributed GitHub commits by all group members, and sufficient time for review and quality assurance before submission.
