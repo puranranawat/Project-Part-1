@@ -9,7 +9,7 @@ This section reflects on the success and challenges in the project and with team
 
 A screenshot showing the GitHub commit history of **all group members** is included below. The commit history demonstrates regular and distributed contributions across multiple weeks of the term, rather than commits being concentrated only near submission deadlines.
 
-![GitHub Commit History](./reflection/github_commits (2).png)
+![GitHub Commit History](./reflection/github_commits.png)
 The commit frequency tool on GitHub was used to review contribution patterns and confirm consistent participation by both students throughout the project duration.
 
 ---
