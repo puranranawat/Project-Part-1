@@ -25,7 +25,7 @@ Risk levels were evaluated using a qualitative scale:
 
 The completed risk register spreadsheet is provided below:
 
-[View risk assessment spreadsheet](./risk-assessment.xlsx)
+[View risk assessment spreadsheet](./risk_assessment_HD.xlsx)
 
 ---
 
